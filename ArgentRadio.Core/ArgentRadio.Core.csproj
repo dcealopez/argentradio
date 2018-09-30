@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E3E54473-0965-4D84-9EE9-B0BE46411A39}</ProjectGuid>
+    <ProjectGuid>{C62BD1E4-1064-4635-BDB0-C366C270A1BA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ArgentRadio.Conditions</RootNamespace>
-    <AssemblyName>ArgentRadio.Conditions</AssemblyName>
+    <RootNamespace>ArgentRadio.Core</RootNamespace>
+    <AssemblyName>ArgentRadio.Core</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,29 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Condition.cs" />
-    <Compile Include="Matches\AndMatchGroup.cs" />
-    <Compile Include="Matches\BaseMatchGroup.cs" />
-    <Compile Include="Matches\IMatchGroup.cs" />
-    <Compile Include="Matches\Match.cs" />
-    <Compile Include="Matches\OrMatchGroup.cs" />
-    <Compile Include="Operators\BaseOperator.cs" />
-    <Compile Include="Operators\ContainsOperator.cs" />
-    <Compile Include="Operators\EndsWithOperator.cs" />
-    <Compile Include="Operators\EqualsOperator.cs" />
-    <Compile Include="Operators\IOperator.cs" />
-    <Compile Include="Operators\NotContainsOperator.cs" />
-    <Compile Include="Operators\NotEndsWithOperator.cs" />
-    <Compile Include="Operators\NotEqualsOperator.cs" />
-    <Compile Include="Operators\NotStartsWithOperator.cs" />
-    <Compile Include="Operators\StartsWithOperator.cs" />
+    <Compile Include="StringHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ArgentRadio.Core\ArgentRadio.Core.csproj">
-      <Project>{c62bd1e4-1064-4635-bdb0-c366c270a1ba}</Project>
-      <Name>ArgentRadio.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
