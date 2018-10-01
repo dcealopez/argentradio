@@ -1,2 +1,2 @@
 # Argent Radio
-Notificaciones sonoras para la radio de la policía de Los Santos Juego de Rol.
+Acciones automáticas para la radio de la policía de Los Santos Juego de Rol.
