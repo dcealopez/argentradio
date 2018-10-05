@@ -1,4 +1,4 @@
-﻿namespace ArgentRadio.Core
+﻿namespace ArgentRadio.Common
 {
     /// <summary>
     /// Clase helper para la manipulación de cadenas

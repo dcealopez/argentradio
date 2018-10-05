@@ -3,16 +3,16 @@
     /// <summary>
     /// Grupo de condiciones AND
     /// </summary>
-    public class AndMatchGroup : BaseMatchGroup
+    public class AndMatchGroup : MatchGroup
     {
         public override bool Evaluate(string text)
         {
-            #region Evaluar las condiciones del grupo
+            // Evaluar las condiciones del grupo
             bool matchesResult = true;
 
-            if (Matches?.Length > 0)
+            if (Matches?.Count > 0)
             {
-                for (int i = 0; i < Matches.Length; i++)
+                for (int i = 0; i < Matches.Count; i++)
                 {
                     matchesResult = Matches[i].Evaluate(text);
 
@@ -22,14 +22,13 @@
                     }
                 }
             }
-            #endregion
 
-            #region Evaluar los grupos de condiciones hijos de este grupo        
+            // Evaluar los grupos de condiciones hijos de este grupo        
             bool childMatchGroupsResults = true;
 
-            if (ChildMatchGroups?.Length > 0)
+            if (ChildMatchGroups?.Count > 0)
             {
-                for (int i = 0; i < ChildMatchGroups.Length; i++)
+                for (int i = 0; i < ChildMatchGroups.Count; i++)
                 {
                     childMatchGroupsResults = ChildMatchGroups[i].Evaluate(text);
 
@@ -39,7 +38,6 @@
                     }
                 }
             }
-            #endregion
 
             return matchesResult && childMatchGroupsResults;
         }

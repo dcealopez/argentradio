@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArgentRadio.Conditions", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArgentRadio.Core", "ArgentRadio.Core\ArgentRadio.Core.csproj", "{C62BD1E4-1064-4635-BDB0-C366C270A1BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArgentRadio.Common", "ArgentRadio.Common\ArgentRadio.Common.csproj", "{EB774B66-1094-492D-961A-D9669C1CE9B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArgentRadio.Actions", "ArgentRadio.Actions\ArgentRadio.Actions.csproj", "{EE49689B-ED19-498E-94C9-062A09076368}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{C62BD1E4-1064-4635-BDB0-C366C270A1BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C62BD1E4-1064-4635-BDB0-C366C270A1BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C62BD1E4-1064-4635-BDB0-C366C270A1BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB774B66-1094-492D-961A-D9669C1CE9B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB774B66-1094-492D-961A-D9669C1CE9B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB774B66-1094-492D-961A-D9669C1CE9B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB774B66-1094-492D-961A-D9669C1CE9B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE49689B-ED19-498E-94C9-062A09076368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE49689B-ED19-498E-94C9-062A09076368}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE49689B-ED19-498E-94C9-062A09076368}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE49689B-ED19-498E-94C9-062A09076368}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

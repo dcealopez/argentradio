@@ -3,11 +3,12 @@
     /// <summary>
     /// Operador que evalúa si una cadena no contiene otra
     /// </summary>
+    [Operator(InternalName = "notcontains")]
     public class NotContainsOperator : ContainsOperator
     {
-        public new static NotContainsOperator Instance = new NotContainsOperator { InternalName = "notcontains" };
+        public new static NotContainsOperator Instance = new NotContainsOperator();
 
-        public override bool Evaluate(string match, string text)
+        public new bool Evaluate(string match, string text)
         {
             return !base.Evaluate(match, text);
         }

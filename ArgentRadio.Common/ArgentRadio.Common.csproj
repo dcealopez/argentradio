@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E3E54473-0965-4D84-9EE9-B0BE46411A39}</ProjectGuid>
+    <ProjectGuid>{EB774B66-1094-492D-961A-D9669C1CE9B6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ArgentRadio.Conditions</RootNamespace>
-    <AssemblyName>ArgentRadio.Conditions</AssemblyName>
+    <RootNamespace>ArgentRadio.Common</RootNamespace>
+    <AssemblyName>ArgentRadio.Common</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,33 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Condition.cs" />
-    <Compile Include="Matches\AndMatchGroup.cs" />
-    <Compile Include="Matches\MatchGroup.cs" />
-    <Compile Include="Matches\IMatchGroup.cs" />
-    <Compile Include="Matches\Match.cs" />
-    <Compile Include="Matches\OrMatchGroup.cs" />
-    <Compile Include="Operators\Operator.cs" />
-    <Compile Include="Operators\ContainsOperator.cs" />
-    <Compile Include="Operators\EndsWithOperator.cs" />
-    <Compile Include="Operators\EqualsOperator.cs" />
-    <Compile Include="Operators\IOperator.cs" />
-    <Compile Include="Operators\NotContainsOperator.cs" />
-    <Compile Include="Operators\NotEndsWithOperator.cs" />
-    <Compile Include="Operators\NotEqualsOperator.cs" />
-    <Compile Include="Operators\NotStartsWithOperator.cs" />
-    <Compile Include="Operators\StartsWithOperator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ArgentRadio.Actions\ArgentRadio.Actions.csproj">
-      <Project>{ee49689b-ed19-498e-94c9-062a09076368}</Project>
-      <Name>ArgentRadio.Actions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ArgentRadio.Common\ArgentRadio.Common.csproj">
-      <Project>{eb774b66-1094-492d-961a-d9669c1ce9b6}</Project>
-      <Name>ArgentRadio.Common</Name>
-    </ProjectReference>
+    <Compile Include="StringHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

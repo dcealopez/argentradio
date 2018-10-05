@@ -1,15 +1,16 @@
-﻿using ArgentRadio.Core;
+﻿using ArgentRadio.Common;
 
 namespace ArgentRadio.Conditions.Operators
 {
     /// <summary>
     /// Operador que evalúa si una cadena termina con otra
     /// </summary>
-    public class EndsWithOperator : BaseOperator
+    [Operator(InternalName = "endswith")]
+    public class EndsWithOperator : IOperator
     {
-        public static EndsWithOperator Instance = new EndsWithOperator { InternalName = "endswith" };
+        public static EndsWithOperator Instance = new EndsWithOperator();
 
-        public override bool Evaluate(string match, string text)
+        public bool Evaluate(string match, string text)
         {
             return StringHelper.Normalize(text).EndsWith(StringHelper.Normalize(match));
         }

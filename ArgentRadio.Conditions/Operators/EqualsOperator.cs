@@ -1,15 +1,16 @@
-﻿using ArgentRadio.Core;
+﻿using ArgentRadio.Common;
 
 namespace ArgentRadio.Conditions.Operators
 {
     /// <summary>
     /// Operador que evalúa si una cadena es igual a otra
     /// </summary>
-    public class EqualsOperator : BaseOperator
+    [Operator(InternalName = "equals")]
+    public class EqualsOperator : IOperator
     {
-        public static EqualsOperator Instance = new EqualsOperator { InternalName = "equals" };
+        public static EqualsOperator Instance = new EqualsOperator();
 
-        public override bool Evaluate(string match, string text)
+        public bool Evaluate(string match, string text)
         {
             return StringHelper.Normalize(text).Equals(StringHelper.Normalize(match));
         }

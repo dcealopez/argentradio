@@ -41,8 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StringHelper.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ArgentRadio.Conditions\ArgentRadio.Conditions.csproj">
+      <Project>{e3e54473-0965-4d84-9ee9-b0be46411a39}</Project>
+      <Name>ArgentRadio.Conditions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
