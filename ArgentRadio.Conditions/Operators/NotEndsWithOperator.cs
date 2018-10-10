@@ -6,9 +6,9 @@
     [Operator(InternalName = "notendswith")]
     public class NotEndsWithOperator : EndsWithOperator
     {
-        public new static NotEndsWithOperator Instance = new NotEndsWithOperator();
+        public new static readonly NotEndsWithOperator Instance = new NotEndsWithOperator();
 
-        public new bool Evaluate(string match, string text)
+        public override bool Evaluate(string match, string text)
         {
             return !base.Evaluate(match, text);
         }

@@ -4,7 +4,7 @@
     /// Interfaz para los operadores condicionales
     /// </summary>
     public interface IOperator
-    {        
+    {
         /// <summary>
         /// Evalúa una cadena con otra con el operador especificado
         /// </summary>

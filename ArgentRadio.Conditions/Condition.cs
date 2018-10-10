@@ -21,7 +21,7 @@ namespace ArgentRadio.Conditions
         public AndMatchGroup Rules { get; set; }
 
         /// <summary>
-        /// Acciones a ejecutar de la condición        
+        /// Acciones a ejecutar de la condición
         /// Contiene una lista de tuplas:
         /// El primer valor contiene el nombre interno de la acción
         /// El segundo valor contiene los argumentos a pasar a la acción
@@ -43,7 +43,8 @@ namespace ArgentRadio.Conditions
         /// </summary>
         public void ExecuteActions()
         {
-            Actions.Select(a => a).ToList().ForEach(action => ArgentRadio.Actions.Action.Execute(action.Item1, action.Item2));
+            Actions.Select(action => action).ToList()
+                .ForEach(action => ArgentRadio.Actions.Action.Execute(action.Item1, action.Item2));
         }
     }
 }

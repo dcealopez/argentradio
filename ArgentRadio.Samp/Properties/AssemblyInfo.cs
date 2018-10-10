@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
-[assembly: AssemblyTitle("ArgentRadio.Actions")]
+[assembly: AssemblyTitle("ArgentRadio.Samp")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ArgentRadio.Actions")]
+[assembly: AssemblyProduct("ArgentRadio.Samp")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // El siguiente GUID sirve como id. de typelib si este proyecto se expone a COM.
-[assembly: Guid("ee49689b-ed19-498e-94c9-062a09076368")]
+[assembly: Guid("7abb0a64-9a15-43e3-9171-cd99d70166fb")]
 
 // La información de versión de un ensamblado consta de los cuatro valores siguientes:
 //

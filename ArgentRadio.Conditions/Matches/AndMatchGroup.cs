@@ -8,13 +8,13 @@
         public override bool Evaluate(string text)
         {
             // Evaluar las condiciones del grupo
-            bool matchesResult = true;
+            var matchesResult = true;
 
-            if (Matches?.Count > 0)
+            if (Matches != null)
             {
-                for (int i = 0; i < Matches.Count; i++)
+                foreach (var match in Matches)
                 {
-                    matchesResult = Matches[i].Evaluate(text);
+                    matchesResult = match.Evaluate(text);
 
                     if (!matchesResult)
                     {
@@ -23,14 +23,14 @@
                 }
             }
 
-            // Evaluar los grupos de condiciones hijos de este grupo        
-            bool childMatchGroupsResults = true;
+            // Evaluar los grupos de condiciones hijos de este grupo
+            var childMatchGroupsResults = true;
 
-            if (ChildMatchGroups?.Count > 0)
+            if (ChildMatchGroups != null)
             {
-                for (int i = 0; i < ChildMatchGroups.Count; i++)
+                foreach (var childMatchGroup in ChildMatchGroups)
                 {
-                    childMatchGroupsResults = ChildMatchGroups[i].Evaluate(text);
+                    childMatchGroupsResults = childMatchGroup.Evaluate(text);
 
                     if (!childMatchGroupsResults)
                     {

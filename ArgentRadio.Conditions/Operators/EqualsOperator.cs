@@ -8,9 +8,9 @@ namespace ArgentRadio.Conditions.Operators
     [Operator(InternalName = "equals")]
     public class EqualsOperator : IOperator
     {
-        public static EqualsOperator Instance = new EqualsOperator();
+        public static readonly EqualsOperator Instance = new EqualsOperator();
 
-        public bool Evaluate(string match, string text)
+        public virtual bool Evaluate(string match, string text)
         {
             return StringHelper.Normalize(text).Equals(StringHelper.Normalize(match));
         }

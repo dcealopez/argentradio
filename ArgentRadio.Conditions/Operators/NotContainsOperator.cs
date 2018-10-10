@@ -6,9 +6,9 @@
     [Operator(InternalName = "notcontains")]
     public class NotContainsOperator : ContainsOperator
     {
-        public new static NotContainsOperator Instance = new NotContainsOperator();
+        public new static readonly NotContainsOperator Instance = new NotContainsOperator();
 
-        public new bool Evaluate(string match, string text)
+        public override bool Evaluate(string match, string text)
         {
             return !base.Evaluate(match, text);
         }

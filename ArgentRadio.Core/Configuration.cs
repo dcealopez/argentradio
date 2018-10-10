@@ -17,59 +17,69 @@ namespace ArgentRadio.Core
         /// <summary>
         /// Nombre del fichero de configuración XML
         /// </summary>
-        public const string ConfigurationFile = "config.xml";
+        public static readonly string ConfigurationFile = "config.xml";
 
         /// <summary>
         /// Parámetros de configuración a nivel de aplicación
         /// </summary>
-        public static Settings AppSettings { get; set; }
+        public static Settings AppSettings { get; set; } = new Settings();
 
         /// <summary>
         /// Condiciones para las notificaciones sonoras
         /// </summary>
-        public static List<Condition> Conditions { get; set; }
+        public static List<Condition> Conditions { get; set; } = new List<Condition>();
 
         /// <summary>
         /// Lee y carga la configuración del fichero de configuración
         /// </summary>
         public static void LoadXmlConfigurationFile()
         {
-            XDocument xmlConfigDocument = XDocument.Load($"./{ConfigurationFile}");
+            var xmlConfigDocument = XDocument.Load($"./{ConfigurationFile}");
+
+            if (xmlConfigDocument.Root == null)
+            {
+                return;
+            }
+
             Conditions = new List<Condition>();
-            
+
             // Cargar la configuración a nivel de aplicación
             var settingsSection = xmlConfigDocument.Root.Element("Settings");
 
             AppSettings = new Settings
             {
-                UnitDesignation = (string)settingsSection.Element("UnitDesignation")
+                UnitDesignation = (string) settingsSection?.Element("UnitDesignation")
             };
 
             // Cargar las condiciones
-            IEnumerable<XElement> xmlConditions = xmlConfigDocument.Root.Element("Conditions").Elements().Where(e => e.Name == "Condition");
+            var xmlConditions = xmlConfigDocument.Root.Element("Conditions")?.Elements()
+                .Where(e => e.Name == "Condition");
 
-            foreach(XElement xmlCondition in xmlConditions)
+            if (xmlConditions == null)
             {
-                string description = (string)xmlCondition.Attribute("Description");
-                List<Tuple<string, string>> actions = new List<Tuple<string, string>>();
+                return;
+            }
+
+            foreach (var xmlCondition in xmlConditions)
+            {
+                var description = (string) xmlCondition.Attribute("Description");
+                var actions = new List<Tuple<string, string>>();
 
                 // Cargar las acciones de la condición
-                xmlCondition.Element("Actions").Elements("Command").ToList().ForEach(action => actions.Add(new Tuple<string, string>((string)action.Attribute("Name"), (string)action.Attribute("Args"))));
+                xmlCondition.Element("Actions")?.Elements("Command").ToList()
+                    .ForEach(action =>
+                        actions.Add(
+                            new Tuple<string, string>(
+                                (string) action.Attribute("Name"),
+                                (string) action.Attribute("Args"))));
 
-                // Cargar las reglas de la condición
-                AndMatchGroup rootMatchGroup = new AndMatchGroup
-                {
-                    Matches = xmlCondition.Element("Rules").Elements("Match").Where(e => !e.HasElements).Select(m => new Match { Text = m.Value, ConditionalOperator = Operator.GetInstanceFromInternalName((string)m.Attribute("Operator")) }).ToList(),
-
-                    ChildMatchGroups = GetConditionMatchGroupsFromXmlMatches(xmlCondition.Element("Rules"))
-                };
-
+                // Crear la condición y cargar sus reglas
                 Conditions.Add(new Condition
                 {
                     Description = description,
                     Actions = actions,
-                    Rules = rootMatchGroup
-                }); 
+                    Rules = GetConditions<AndMatchGroup>(xmlCondition.Element("Rules"))
+                });
             }
         }
 
@@ -78,111 +88,150 @@ namespace ArgentRadio.Core
         /// </summary>
         public static void WriteXmlConfiguratonFile()
         {
-            XElement rootElement = new XElement("ArgentRadio");
+            if (AppSettings == null)
+            {
+                AppSettings = new Settings();
+            }
+
+            if (Conditions == null)
+            {
+                Conditions = new List<Condition>();
+            }
+
+            var rootElement = new XElement("ArgentRadio");
             rootElement.Add(new XElement("Settings"));
             rootElement.Add(new XElement("Conditions"));
 
             // Construir la configuración a nivel de aplicación
-            rootElement.Element("Settings").Add(new XElement("UnitDesignation", AppSettings.UnitDesignation));
+            rootElement.Element("Settings")
+                ?.Add(new XElement("UnitDesignation", AppSettings.UnitDesignation));
 
             // Construir las condiciones
-            foreach(Condition condition in Conditions)
+            foreach (var condition in Conditions)
             {
-                XElement conditionElement = new XElement("Condition");
+                var conditionElement = new XElement("Condition");
                 conditionElement.Add(new XElement("Actions"));
                 conditionElement.SetAttributeValue("Description", condition.Description);
 
                 // Construir las acciones
-                condition.Actions.ForEach(action =>
+                if (condition.Actions != null)
                 {
-                    XElement commandElement = new XElement("Command");
-                    commandElement.SetAttributeValue("Name", action.Item1);
-                    commandElement.SetAttributeValue("Args", action.Item2);
+                    foreach (var action in condition.Actions)
+                    {
+                        var commandElement = new XElement("Command");
+                        commandElement.SetAttributeValue("Name", action.Item1);
+                        commandElement.SetAttributeValue("Args", action.Item2);
 
-                    conditionElement.Element("Actions").Add(commandElement);
-                });
+                        conditionElement.Element("Actions")?.Add(commandElement);
+                    }
+                }
 
                 // Construir las reglas de la condición
-                XElement rulesElement = new XElement("Rules");
+                var rulesElement = new XElement("Rules");
                 rulesElement = CreateXmlConditionRules(condition.Rules, rulesElement);
 
                 conditionElement.Add(rulesElement);
 
-                rootElement.Element("Conditions").Add(conditionElement);
+                rootElement.Element("Conditions")?.Add(conditionElement);
             }
 
-            XDocument xmlConfigurationFile = new XDocument(rootElement);
+            var xmlConfigurationFile = new XDocument(rootElement);
             xmlConfigurationFile.Save($"./{ConfigurationFile}");
         }
 
         /// <summary>
-        /// (Recursivo) Devuelve instancias de todos los grupos
-        /// de condiciones almacenados en una condición XML
+        /// (Recursivo) Obtiene todas las condiciones contenidas dentro
+        /// del elemento XML pasado como argumento
         /// </summary>
-        /// <param name="xmlCondition">elemento XML raíz donde están almacendas los grupos de condiciones</param>
-        /// <returns>los grupos de condiciones almacenados en una condición XML</returns>
-        private static List<IMatchGroup> GetConditionMatchGroupsFromXmlMatches(XElement xmlCondition)
+        /// <typeparam name="T">tipo de grupo de condiciones a devolver</typeparam>
+        /// <param name="rulesElement">elemento XML donde están definidas las condiciones</param>
+        /// <returns>un grupo de condiciones raíz con todas las condiciones cargadas</returns>
+        private static T GetConditions<T>(XContainer rulesElement) where T : MatchGroup, new()
         {
-            List<IMatchGroup> matchGroups = new List<IMatchGroup>();
-            IEnumerable<XElement> xmlMatchGroups = xmlCondition.Elements().Where(e => (e.Name == "OrGroup" || e.Name == "AndGroup") && e.Parent == xmlCondition);   
-            
-            // Cargamos las condiciones de los grupos de condiciones encontrados
-            foreach(XElement xmlMatchGroup in xmlMatchGroups)
+            var rootGroup = new T
             {
-                List<Match> matchGroupConditions = xmlMatchGroups.Elements("Match").Where(e => !e.HasElements).Select(m => new Match { Text = m.Value, ConditionalOperator = Operator.GetInstanceFromInternalName((string)m.Attribute("Operator")) }).ToList();
-                IMatchGroup matchGroup = null;
+                Matches = rulesElement.Elements("Match")
+                    .Where(matchElement => !matchElement.HasElements)
+                    .Select(matchElement =>
+                        new Match
+                        {
+                            Text = matchElement.Value,
+                            ConditionalOperator =
+                                Operator.GetInstanceFromInternalName(
+                                    (string) matchElement.Attribute("Operator"))
+                        })
+                    .ToList(),
 
-                if(xmlMatchGroup.Name == "OrGroup")
-                {
-                    matchGroup = new OrMatchGroup
-                    {
-                        Matches = matchGroupConditions,
-                        ChildMatchGroups = GetConditionMatchGroupsFromXmlMatches(xmlMatchGroup)
-                    };
-                }
-                else if(xmlMatchGroup.Name == "AndGroup")
-                {
-                    matchGroup = new AndMatchGroup
-                    {
-                        Matches = matchGroupConditions,
-                        ChildMatchGroups = GetConditionMatchGroupsFromXmlMatches(xmlMatchGroup)
-                    };
-                }
+                ChildMatchGroups = new List<MatchGroup>()
+            };
 
-                if(matchGroup != null)
+            var matchGroups = rulesElement.Elements()
+                .Where(element =>
+                    (element.Name == "OrGroup" || element.Name == "AndGroup") &&
+                    element.Parent == rulesElement)
+                .ToList();
+
+            foreach (var matchGroup in matchGroups)
+            {
+                if (matchGroup.Name == "OrGroup")
                 {
-                    matchGroups.Add(matchGroup);
+                    rootGroup.ChildMatchGroups.Add(GetConditions<OrMatchGroup>(matchGroup));
+                }
+                else if (matchGroup.Name == "AndGroup")
+                {
+                    rootGroup.ChildMatchGroups.Add(GetConditions<AndMatchGroup>(matchGroup));
                 }
             }
 
-            return matchGroups;
+            return rootGroup;
         }
 
         /// <summary>
-        /// (Recursivo) Construye y guarda en la instancia XElement pasada como parámetro 
+        /// (Recursivo) Construye y guarda en la instancia XElement pasada como parámetro
         /// el árbol de condiciones completo de una condición
         /// </summary>
-        /// <param name="matchGroup">grupo de condiciones sobre elque empezar a construir el árbol, normalmente es el raíz</param>
-        /// <param name="rulesElement">XElement donde se almacenará el árbol de condiciones completo de la condición</param>
+        /// <param name="matchGroup">
+        /// grupo de condiciones sobre el que empezar a construir el árbol, normalmente es el raíz
+        /// </param>
+        /// <param name="rulesElement">
+        /// XElement donde se almacenará el árbol de condiciones completo de la condición
+        /// </param>
         /// <returns>el árbol de condiciones completo de una condición</returns>
-        private static XElement CreateXmlConditionRules(MatchGroup matchGroup, XElement rulesElement)
+        private static XElement CreateXmlConditionRules(MatchGroup matchGroup,
+            XElement rulesElement)
         {
             // Escribimos las condiciones del grupo actual
-            foreach(Match match in matchGroup.Matches)
+            foreach (var match in matchGroup.Matches)
             {
-                XElement matchElement = new XElement("Match", match.Text);
-                matchElement.SetAttributeValue("Operator", Operator.GetOperatorInternalName(match.ConditionalOperator));
+                var matchElement = new XElement("Match", match.Text);
+                matchElement.SetAttributeValue("Operator",
+                    Operator.GetOperatorInternalName(match.ConditionalOperator));
+
                 rulesElement.Add(matchElement);
             }
 
-            // Escribimos los grupos de condiciones hijos del grupo de condiciones actual
-            foreach(MatchGroup childMatchGroup in matchGroup.ChildMatchGroups)
+            if (matchGroup.ChildMatchGroups == null)
             {
-                XElement matchGroupElement = new XElement(childMatchGroup.GetType() == typeof(OrMatchGroup) ? "OrGroup" : (childMatchGroup.GetType() == typeof(AndMatchGroup) ? "AndGroup" : null));
+                return rulesElement;
+            }
 
+            // Escribimos los grupos de condiciones hijos del grupo de condiciones actual
+            foreach (var childMatchGroup in matchGroup.ChildMatchGroups)
+            {
+                var matchGroupElementName = childMatchGroup is OrMatchGroup
+                    ? "OrGroup"
+                    : childMatchGroup is AndMatchGroup ? "AndGroup" : null;
+
+                if (matchGroupElementName == null)
+                {
+                    continue;
+                }
+
+                var matchGroupElement = new XElement(matchGroupElementName);
                 matchGroupElement = CreateXmlConditionRules(childMatchGroup, matchGroupElement);
+
                 rulesElement.Add(matchGroupElement);
-            }            
+            }
 
             return rulesElement;
         }

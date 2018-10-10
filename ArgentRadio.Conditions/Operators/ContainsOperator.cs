@@ -8,9 +8,9 @@ namespace ArgentRadio.Conditions.Operators
     [Operator(InternalName = "contains")]
     public class ContainsOperator : IOperator
     {
-        public static ContainsOperator Instance = new ContainsOperator();
+        public static readonly ContainsOperator Instance = new ContainsOperator();
 
-        public bool Evaluate(string match, string text)
+        public virtual bool Evaluate(string match, string text)
         {
             return StringHelper.Normalize(text).Contains(StringHelper.Normalize(match));
         }

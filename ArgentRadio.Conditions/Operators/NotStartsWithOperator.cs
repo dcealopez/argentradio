@@ -6,9 +6,9 @@
     [Operator(InternalName = "notstartswith")]
     public class NotStartsWithOperator : StartsWithOperator
     {
-        public new static NotStartsWithOperator Instance = new NotStartsWithOperator();
+        public new static readonly NotStartsWithOperator Instance = new NotStartsWithOperator();
 
-        public new bool Evaluate(string match, string text)
+        public override bool Evaluate(string match, string text)
         {
             return !base.Evaluate(match, text);
         }

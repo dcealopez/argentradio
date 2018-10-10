@@ -8,9 +8,9 @@ namespace ArgentRadio.Conditions.Operators
     [Operator(InternalName = "startswith")]
     public class StartsWithOperator : IOperator
     {
-        public static StartsWithOperator Instance = new StartsWithOperator();
+        public static readonly StartsWithOperator Instance = new StartsWithOperator();
 
-        public bool Evaluate(string match, string text)
+        public virtual bool Evaluate(string match, string text)
         {
             return StringHelper.Normalize(text).StartsWith(StringHelper.Normalize(match));
         }

@@ -8,9 +8,9 @@ namespace ArgentRadio.Conditions.Operators
     [Operator(InternalName = "endswith")]
     public class EndsWithOperator : IOperator
     {
-        public static EndsWithOperator Instance = new EndsWithOperator();
+        public static readonly EndsWithOperator Instance = new EndsWithOperator();
 
-        public bool Evaluate(string match, string text)
+        public virtual bool Evaluate(string match, string text)
         {
             return StringHelper.Normalize(text).EndsWith(StringHelper.Normalize(match));
         }

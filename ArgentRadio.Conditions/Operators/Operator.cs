@@ -18,11 +18,18 @@ namespace ArgentRadio.Conditions.Operators
         /// <summary>
         /// Devuelve la instancia del operador con el nombre interno pasado como parámetro
         /// </summary>
-        /// <param name="internalName">nombre interno del operador</param>
+        /// <param name="name">nombre interno del operador</param>
         /// <returns>la instancia del operador con el nombre interno pasado como parámetro</returns>
-        public static IOperator GetInstanceFromInternalName(string internalName)
+        public static IOperator GetInstanceFromInternalName(string name)
         {
-            return (IOperator)(Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetCustomAttribute(typeof(Operator)) != null && ((Operator)t.GetCustomAttribute(typeof(Operator))).InternalName == internalName && t.GetInterfaces().Contains(typeof(IOperator)) && t.GetField("Instance") != null && t.GetField("Instance").GetValue(null) != null).Select(i => i.GetField("Instance").GetValue(null)).FirstOrDefault());
+            return (IOperator) (Assembly.GetExecutingAssembly().GetTypes().Where(type =>
+                    type.GetCustomAttribute(typeof(Operator)) != null &&
+                    ((Operator) type.GetCustomAttribute(typeof(Operator))).InternalName == name &&
+                    type.GetInterfaces().Contains(typeof(IOperator)) &&
+                    type.GetField("Instance") != null &&
+                    type.GetField("Instance").GetValue(null) != null)
+                .Select(type => type.GetField("Instance").GetValue(null))
+                .FirstOrDefault());
         }
 
         /// <summary>
@@ -32,7 +39,12 @@ namespace ArgentRadio.Conditions.Operators
         /// <returns>el nombre interno del operador pasado como parámetro</returns>
         public static string GetOperatorInternalName(IOperator conditionalOperator)
         {
-            return (string)(Assembly.GetExecutingAssembly().GetTypes().Where(t => t == conditionalOperator.GetType() && t.GetCustomAttribute(typeof(Operator)) != null).Select(n => ((Operator)n.GetCustomAttribute(typeof(Operator))).InternalName).FirstOrDefault());
+            return (Assembly.GetExecutingAssembly().GetTypes()
+                .Where(type =>
+                    type == conditionalOperator.GetType() &&
+                    type.GetCustomAttribute(typeof(Operator)) != null)
+                .Select(type => ((Operator) type.GetCustomAttribute(typeof(Operator))).InternalName)
+                .FirstOrDefault());
         }
     }
 }

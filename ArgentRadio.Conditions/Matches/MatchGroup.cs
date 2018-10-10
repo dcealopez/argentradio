@@ -15,8 +15,8 @@ namespace ArgentRadio.Conditions.Matches
         /// <summary>
         /// Grupos de condiciones que contiene el grupo
         /// </summary>
-        public List<IMatchGroup> ChildMatchGroups { get; set; }
+        public List<MatchGroup> ChildMatchGroups { get; set; }
 
-        public abstract bool Evaluate(string text);        
+        public abstract bool Evaluate(string text);
     }
 }
