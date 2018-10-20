@@ -11,6 +11,11 @@ namespace ArgentRadio.Conditions
     public class Condition
     {
         /// <summary>
+        /// Prioridad de la condición
+        /// </summary>
+        public int Priority { get; set; }
+
+        /// <summary>
         /// Descripción de la condición
         /// </summary>
         public string Description { get; set; }

@@ -3,6 +3,7 @@ using ArgentRadio.Conditions.Matches;
 using ArgentRadio.Conditions.Operators;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -34,7 +35,7 @@ namespace ArgentRadio.Core
         /// </summary>
         public static void LoadXmlConfigurationFile()
         {
-            var xmlConfigDocument = XDocument.Load($"./{ConfigurationFile}");
+            var xmlConfigDocument = XDocument.Load($"{AppDomain.CurrentDomain.BaseDirectory}{Path.DirectorySeparatorChar}{ConfigurationFile}");
 
             if (xmlConfigDocument.Root == null)
             {
@@ -63,6 +64,7 @@ namespace ArgentRadio.Core
             foreach (var xmlCondition in xmlConditions)
             {
                 var description = (string) xmlCondition.Attribute("Description");
+                var priority = (int) xmlCondition.Attribute("Priority");
                 var actions = new List<Tuple<string, string>>();
 
                 // Cargar las acciones de la condición
@@ -76,6 +78,7 @@ namespace ArgentRadio.Core
                 // Crear la condición y cargar sus reglas
                 Conditions.Add(new Condition
                 {
+                    Priority = priority,
                     Description = description,
                     Actions = actions,
                     Rules = GetConditions<AndMatchGroup>(xmlCondition.Element("Rules"))
@@ -111,6 +114,7 @@ namespace ArgentRadio.Core
             {
                 var conditionElement = new XElement("Condition");
                 conditionElement.Add(new XElement("Actions"));
+                conditionElement.SetAttributeValue("Priority", condition.Priority);
                 conditionElement.SetAttributeValue("Description", condition.Description);
 
                 // Construir las acciones
@@ -136,7 +140,7 @@ namespace ArgentRadio.Core
             }
 
             var xmlConfigurationFile = new XDocument(rootElement);
-            xmlConfigurationFile.Save($"./{ConfigurationFile}");
+            xmlConfigurationFile.Save($"{AppDomain.CurrentDomain.BaseDirectory}{Path.DirectorySeparatorChar}{ConfigurationFile}");
         }
 
         /// <summary>
